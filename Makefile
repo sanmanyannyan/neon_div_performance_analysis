@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O3 -mfpu=neon-vfpv4 -march=armv7-a -mtune=cortex-a53
+CFLAGS=-O3 -mfpu=neon-vfpv4 -march=armv8-a -mtune=cortex-a53
 
 run:div div.s
 	./div
