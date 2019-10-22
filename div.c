@@ -954,6 +954,99 @@ int main(int argc,char *argv[]){
 #endif
 #endif
 #endif
+
+	// vdivq
+	vx1 = vld1q_f32(mul11); vx2 = vld1q_f32(mul12); vx3 = vld1q_f32(mul13); vx4 = vld1q_f32(mul14);
+	vx5 = vld1q_f32(mul15); vx6 = vld1q_f32(mul16); vx7 = vld1q_f32(mul17); vx8 = vld1q_f32(mul18);
+	vone = vdupq_n_f32(1.f);
+	mean = 0.0;
+	for(int i=0 ; i<num_trials ; ++i){
+		gettimeofday(&tvs, NULL);
+		asm volatile("# start unroll vdivq");
+		for(int j=0 ; j<je ; ++j){
+#if UNROLL > 0
+			vx1 = vdivq_f32(vone, vx1);
+#if UNROLL > 1
+			vx2 = vdivq_f32(vone, vx2);
+#if UNROLL > 2
+			vx3 = vdivq_f32(vone, vx3);
+#if UNROLL > 3
+			vx4 = vdivq_f32(vone, vx4);
+#if UNROLL > 4
+			vx5 = vdivq_f32(vone, vx5);
+#if UNROLL > 5
+			vx6 = vdivq_f32(vone, vx6);
+#if UNROLL > 6
+			vx7 = vdivq_f32(vone, vx7);
+#if UNROLL > 7
+			vx8 = vdivq_f32(vone, vx8);
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+#if UNROLL > 0
+			vx1 = vdivq_f32(vone, vx1);
+#if UNROLL > 1
+			vx2 = vdivq_f32(vone, vx2);
+#if UNROLL > 2
+			vx3 = vdivq_f32(vone, vx3);
+#if UNROLL > 3
+			vx4 = vdivq_f32(vone, vx4);
+#if UNROLL > 4
+			vx5 = vdivq_f32(vone, vx5);
+#if UNROLL > 5
+			vx6 = vdivq_f32(vone, vx6);
+#if UNROLL > 6
+			vx7 = vdivq_f32(vone, vx7);
+#if UNROLL > 7
+			vx8 = vdivq_f32(vone, vx8);
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+		}
+		asm volatile("# end unroll vdivq");
+		gettimeofday(&tve, NULL);
+		exe_times[i] = EXE_TIME_IN_USEC(tvs, tve);
+		mean += EXE_TIME_IN_USEC(tvs, tve);
+	}
+	qsort(exe_times, num_trials, sizeof(double), compare_dbl);
+	printf("unroll vdivq\n");
+	PRINT();
+	vst1q_f32(x1, vx1); vst1q_f32(x2, vx2); vst1q_f32(x3, vx3); vst1q_f32(x4, vx4);
+	vst1q_f32(x5, vx5); vst1q_f32(x6, vx6); vst1q_f32(x7, vx7); vst1q_f32(x8, vx8);
+#if UNROLL > 0
+	fprintf(stderr, "\tvx1:{%f, %f, %f, %f}\n", x1[0], x1[1], x1[2], x1[3]);
+#if UNROLL > 1
+	fprintf(stderr, "\tvx2:{%f, %f, %f, %f}\n", x2[0], x2[1], x2[2], x2[3]);
+#if UNROLL > 2
+	fprintf(stderr, "\tvx3:{%f, %f, %f, %f}\n", x3[0], x3[1], x3[2], x3[3]);
+#if UNROLL > 3
+	fprintf(stderr, "\tvx4:{%f, %f, %f, %f}\n", x4[0], x4[1], x4[2], x4[3]);
+#if UNROLL > 4
+	fprintf(stderr, "\tvx5:{%f, %f, %f, %f}\n", x5[0], x5[1], x5[2], x5[3]);
+#if UNROLL > 5
+	fprintf(stderr, "\tvx6:{%f, %f, %f, %f}\n", x6[0], x6[1], x6[2], x6[3]);
+#if UNROLL > 6
+	fprintf(stderr, "\tvx7:{%f, %f, %f, %f}\n", x7[0], x7[1], x7[2], x7[3]);
+#if UNROLL > 7
+	fprintf(stderr, "\tvx8:{%f, %f, %f, %f}\n", x8[0], x8[1], x8[2], x8[3]);
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
 	
 	free(exe_times);
 	return 0;

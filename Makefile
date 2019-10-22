@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O3 -mfpu=neon-vfpv4 -march=armv8-a -mtune=cortex-a53
+CFLAGS=-O3 -march=native -mtune=cortex-a72
 
 run:div div.s
 	./div
@@ -7,9 +7,7 @@ div:div.c
 	$(CC) $(CFLAGS) $< -o $@
 div.s:div.c
 	$(CC) -S $(CFLAGS) $< -o $@
-div_hand_opt:div_hand_opt.s
-	$(CC) $(CFLAGS) $< -o $@
 
 .PHONY:clean run
 clean:
-	rm -f div.s div
+	rm -f *.s div
